@@ -1,4 +1,4 @@
 # API Error Center
 To run you need:
-Java 8++
+Java 8+
 
