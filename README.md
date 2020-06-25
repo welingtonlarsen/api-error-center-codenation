@@ -1,2 +1,4 @@
-# api-error-center-codenation
-Final project of Java Acceleration in Codenation
+# API Error Center
+To run you need:
+Java 8++
+
