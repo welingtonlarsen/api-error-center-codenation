@@ -21,10 +21,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/errors").permitAll()
+                .antMatchers(HttpMethod.GET, "/dfgfdg").permitAll()
                 .anyRequest().authenticated()
-                .and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .and().formLogin();
     }
 
     @Override
