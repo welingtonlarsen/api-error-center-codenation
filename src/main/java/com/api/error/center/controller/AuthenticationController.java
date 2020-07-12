@@ -3,7 +3,7 @@ package com.api.error.center.controller;
 import com.api.error.center.dto.TokenDto;
 import com.api.error.center.form.LoginForm;
 import com.api.error.center.response.Response;
-import com.api.error.center.service.impl.TokenService;
+import com.api.error.center.service.impl.TokenServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RestController
 @RequestMapping("/authentication")
 public class AuthenticationController {
@@ -27,7 +24,7 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private TokenService tokenService;
+    private TokenServiceImpl tokenServiceImpl;
 
     @PostMapping
     public ResponseEntity<Response<TokenDto>> authenticate(@RequestBody LoginForm loginForm) {
@@ -35,7 +32,7 @@ public class AuthenticationController {
         UsernamePasswordAuthenticationToken login = loginForm.convertToUsernamePasswordAuthenticationToken();
         try {
             Authentication authentication = authenticationManager.authenticate(login);
-            String token = tokenService.generateToken(authentication);
+            String token = tokenServiceImpl.generateToken(authentication);
 
             TokenDto tokenDto = new TokenDto(token, "Bearer");
             response.setData(tokenDto);

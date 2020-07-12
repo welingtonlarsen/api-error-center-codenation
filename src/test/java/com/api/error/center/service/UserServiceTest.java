@@ -2,7 +2,6 @@ package com.api.error.center.service;
 
 import com.api.error.center.entity.User;
 import com.api.error.center.repository.UserRepository;
-import com.api.error.center.service.impl.UserDetailsServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +11,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,38 +22,48 @@ import java.util.Optional;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-public class UserDetailsServiceImplTest {
+public class UserServiceTest {
 
     private User user;
 
     @MockBean
-    private UserRepository userRepository;
+    private UserRepository MockedUserRepository;
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
+    private UserService userService;
 
     @Before
     public void setUp() {
-        User user = new User();
+        this.user = new User();
         user.setUsername("admin");
-        userRepository.save(user);
-        this.user = user;
     }
 
     @Test
     @WithMockUser
-    public void testLoadUserByUsernameValid() {
-        BDDMockito.given(userRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(user));
-        Optional<User> response = userRepository.findByUsername("admin");
+    public void testFindByUsername() {
+        BDDMockito.given(MockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.user));
 
-        Assert.assertEquals(response.get(), user);
+        Optional<User> response = userService.findByUsername("admin");
+        Assert.assertTrue(response.isPresent());
+        Assert.assertEquals("admin", response.get().getUsername());
+    }
+
+    @Test
+    @WithMockUser
+    public void testLoadUserByValidUsername() {
+        BDDMockito.given(MockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.user));
+        UserDetails response = this.userService.loadUserByUsername(user.getUsername());
+
+        Assert.assertEquals(response.getUsername(), this.user.getUsername());
     }
 
     @Test(expected = UsernameNotFoundException.class)
     @WithMockUser
     public void testLoadUserInvalidUsername() {
-        BDDMockito.given(userRepository.findByUsername(Mockito.anyString())).willReturn(Optional.ofNullable(null));
-        userDetailsServiceImpl.loadUserByUsername("invalidUsername");
+        BDDMockito.given(MockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.ofNullable(null));
+        this.userService.loadUserByUsername("invalidUsername");
     }
+
+
 
 }

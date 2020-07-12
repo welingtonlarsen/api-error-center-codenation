@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @ActiveProfiles("test")
 public class UserRepositoryTest {
 
-    private UserProfile userProfile;
+    private User user;
 
     @Autowired
     private UserRepository userRepository;
@@ -31,42 +32,30 @@ public class UserRepositoryTest {
 
     @Before
     public void setUp() {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setProfileName("profile test");
-        userProfileRepository.save(userProfile);
-
-        this.userProfile = userProfile;
+        this.user = new User();
+        user.setPassword("admin");
+        user.setUsername("admin");
     }
 
     @Test
     @WithMockUser
     public void testSave() {
-        List<UserProfile> usersProfile = new ArrayList<>();
-        usersProfile.add(this.userProfile);
-
-        User user = new User();
-        user.setPassword("admin");
-        user.setUsername("admin");
-        user.setUserProfiles(usersProfile);
-
-        User response = userRepository.save(user);
-
+        User response = userRepository.save(this.user);
         Assert.assertNotNull(response);
     }
 
     @Test
     @WithMockUser
     public void testFindByUsername() {
-        User user = new User();
-        user.setPassword("admin");
-        user.setUsername("admin");
-        userRepository.save(user);
-
-        Optional<User> response = userRepository.findByUsername("admin");
+        User userToFind = new User();
+        user.setPassword("userToFind");
+        user.setUsername("userToFind");
+        userRepository.save(userToFind);
+        Optional<User> response = userRepository.findByUsername(userToFind.getUsername());
 
         Assert.assertTrue(response.isPresent());
-        Assert.assertEquals(response.get().getUsername(), user.getUsername());
-        Assert.assertEquals(response.get().getPassword(), user.getPassword());
+        Assert.assertEquals(response.get().getUsername(), userToFind.getUsername());
+        Assert.assertEquals(response.get().getPassword(), userToFind.getPassword());
     }
 }
 
