@@ -11,5 +11,6 @@ public class UsersController {
     @PostMapping
     public void createUser() {
         //Just admins can create other users
+        System.out.println("to no createUser");
     }
 }
