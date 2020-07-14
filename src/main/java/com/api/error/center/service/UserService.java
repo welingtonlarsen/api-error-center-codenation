@@ -11,4 +11,6 @@ public interface UserService extends UserDetailsService {
 
     Optional<User> findById(Long userId);
 
+    User save(User user);
+
 }
