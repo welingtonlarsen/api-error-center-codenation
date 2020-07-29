@@ -27,7 +27,7 @@ public class UserServiceTest {
     private User user;
 
     @MockBean
-    private UserRepository MockedUserRepository;
+    private UserRepository mockedUserRepository;
 
     @Autowired
     private UserService userService;
@@ -41,7 +41,7 @@ public class UserServiceTest {
     @Test
     @WithMockUser
     public void testFindByUsername() {
-        BDDMockito.given(MockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.user));
+        BDDMockito.given(mockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.user));
 
         Optional<User> response = userService.findByUsername("admin");
         Assert.assertTrue(response.isPresent());
@@ -51,7 +51,7 @@ public class UserServiceTest {
     @Test
     @WithMockUser
     public void testLoadUserByValidUsername() {
-        BDDMockito.given(MockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.user));
+        BDDMockito.given(mockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.user));
         UserDetails response = this.userService.loadUserByUsername(user.getUsername());
 
         Assert.assertEquals(response.getUsername(), this.user.getUsername());
@@ -60,7 +60,7 @@ public class UserServiceTest {
     @Test(expected = UsernameNotFoundException.class)
     @WithMockUser
     public void testLoadUserInvalidUsername() {
-        BDDMockito.given(MockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.ofNullable(null));
+        BDDMockito.given(mockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.ofNullable(null));
         this.userService.loadUserByUsername("invalidUsername");
     }
 

@@ -18,7 +18,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserProfile> userProfiles = new ArrayList<>();
 
     public Long getId() {
