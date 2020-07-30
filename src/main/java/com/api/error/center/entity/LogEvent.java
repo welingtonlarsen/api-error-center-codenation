@@ -24,6 +24,17 @@ public class LogEvent {
 
     private int quantity;
 
+    public LogEvent() {
+    }
+
+    public LogEvent(Level level, String description, User source, LocalDateTime date, int quantity) {
+        this.level = level;
+        this.description = description;
+        this.source = source;
+        this.date = date;
+        this.quantity = quantity;
+    }
+
     public Long getId() {
         return id;
     }
