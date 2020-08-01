@@ -33,21 +33,13 @@ public class LogEventServiceTest {
     @Autowired
     LogEventService logEventService;
 
-    @Autowired
-    UserService userService;
-
     @Before
     public void setUp() {
         User user = new User();
-        userService.save(user);
+        user.setId(1L);
 
-        this.logEvent = new LogEvent();
-        logEvent.setId(1L);
-        logEvent.setLevel(Level.ERROR);
-        logEvent.setDescription("Test save LogEventRepository");
-        logEvent.setSource(user);
-        logEvent.setDate(LocalDateTime.now());
-        logEvent.setQuantity(5);
+        this.logEvent = new LogEvent(Level.ERROR, "Test description", "Test log", user, LocalDateTime.now(), 5);
+        this.logEvent.setId(1L);
     }
 
     @Test
@@ -61,6 +53,7 @@ public class LogEventServiceTest {
         Assert.assertEquals(logEvent.getId(), logEvent.getId());
         Assert.assertEquals(logEvent.getLevel(), logEvent.getLevel());
         Assert.assertEquals(logEvent.getDescription(), logEvent.getDescription());
+        Assert.assertEquals(logEvent.getLog(), logEvent.getLog());
         Assert.assertEquals(logEvent.getSource().getId(), logEvent.getSource().getId());
         Assert.assertEquals(logEvent.getDate(), logEvent.getDate());
         Assert.assertEquals(logEvent.getQuantity(), logEvent.getQuantity());

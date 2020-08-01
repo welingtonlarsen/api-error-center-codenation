@@ -5,14 +5,17 @@ import com.api.error.center.entity.User;
 import com.api.error.center.enums.Level;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
 @SpringBootTest
@@ -20,40 +23,41 @@ import java.time.LocalDateTime;
 @ActiveProfiles("test")
 public class LogEventRepositoryTest {
 
+    private User user;
+
     @Autowired
     private LogEventRepository logEventRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-    @Test
-    @WithMockUser
-    public void testSave() {
+    @Before
+    public void setUp() {
         User user = new User();
         user.setUsername("userForTest");
         user.setPassword("passwordForTest");
-        userRepository.save(user);
+        this.user = userRepository.save(user);
+    }
 
+    @Test
+    @WithMockUser
+    public void testSave() {
+        LogEvent logEvent = new LogEvent(Level.ERROR, "Test save LogEventRepository", "Test save Log", this.user, LocalDateTime.now(), 5);
+        LogEvent logEventSaved = logEventRepository.save(logEvent);
+
+        Assert.assertNotNull(logEventSaved);
+        Assert.assertEquals(logEventSaved.getId(), logEvent.getId());
+        Assert.assertEquals(logEventSaved.getLevel(), logEvent.getLevel());
+        Assert.assertEquals(logEventSaved.getDescription(), logEvent.getDescription());
+        Assert.assertEquals(logEventSaved.getSource().getId(), logEvent.getSource().getId());
+        Assert.assertEquals(logEventSaved.getDate(), logEvent.getDate());
+        Assert.assertEquals(logEventSaved.getQuantity(), logEvent.getQuantity());
+    }
+
+    @Test(expected = ConstraintViolationException.class)
+    @WithMockUser
+    public void testSaveIncompletedLogEvent() {
         LogEvent logEvent = new LogEvent();
-        logEvent.setLevel(Level.ERROR);
-        logEvent.setDescription("Test save LogEventRepository");
-        logEvent.setSource(user);
-        logEvent.setDate(LocalDateTime.now());
-        logEvent.setQuantity(5);
         logEventRepository.save(logEvent);
-
-        Assert.assertNotNull(this.findFirstLogEvent());
-        Assert.assertEquals(this.findFirstLogEvent().getId(), logEvent.getId());
-        Assert.assertEquals(this.findFirstLogEvent().getLevel(), logEvent.getLevel());
-        Assert.assertEquals(this.findFirstLogEvent().getDescription(), logEvent.getDescription());
-        Assert.assertEquals(this.findFirstLogEvent().getSource().getId(), logEvent.getSource().getId());
-        Assert.assertEquals(this.findFirstLogEvent().getDate(), logEvent.getDate());
-        Assert.assertEquals(this.findFirstLogEvent().getQuantity(), logEvent.getQuantity());
-
     }
-
-    private LogEvent findFirstLogEvent() {
-        return logEventRepository.findAll().stream().findFirst().get();
-    }
-
 }

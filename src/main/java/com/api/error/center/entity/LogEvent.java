@@ -3,6 +3,7 @@ package com.api.error.center.entity;
 import com.api.error.center.enums.Level;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,18 +13,23 @@ public class LogEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Level level;
 
+    @NotNull
     private String description;
 
+    @NotNull
     private String log;
 
     @ManyToOne
     private User source;
 
+    @NotNull
     private LocalDateTime date;
 
+    @NotNull
     private int quantity;
 
     public LogEvent() {

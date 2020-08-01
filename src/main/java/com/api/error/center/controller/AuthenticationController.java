@@ -43,7 +43,6 @@ public class AuthenticationController {
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-
     }
 
 }
