@@ -14,12 +14,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        String error = ex.getCause().getLocalizedMessage();
-        error = error.substring(0, error.indexOf("\n"));
+        String error = ex.getLocalizedMessage();
+        error = error.substring(0, error.indexOf(":"));
 
         Response<Object> response = new Response<>();
         response.getErrors().add(error);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+
 }

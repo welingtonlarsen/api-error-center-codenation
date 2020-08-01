@@ -21,7 +21,7 @@ public class LogEventForm {
     private String log;
 
     @Pattern(regexp="^([1-9]|([012][0-9])|(3[01]))-([0]{0,1}[1-9]|1[012])-\\d\\d\\d\\d (20|21|22|23|[0-1]?\\d):[0-5]?\\d:[0-5]?\\d$",
-            message = "date must be in the format: dd/MM/yyyy HH:mm:ss")
+            message = "date must be in the format: dd-MM-yyyy HH:mm:ss")
     @NotNull(message = "date must not be null")
     private String date;
 

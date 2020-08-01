@@ -17,6 +17,8 @@ public class LogEvent {
 
     private String description;
 
+    private String log;
+
     @ManyToOne
     private User source;
 
@@ -27,9 +29,10 @@ public class LogEvent {
     public LogEvent() {
     }
 
-    public LogEvent(Level level, String description, User source, LocalDateTime date, int quantity) {
+    public LogEvent(Level level, String description, String log, User source, LocalDateTime date, int quantity) {
         this.level = level;
         this.description = description;
+        this.log = log;
         this.source = source;
         this.date = date;
         this.quantity = quantity;
@@ -57,6 +60,14 @@ public class LogEvent {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
     }
 
     public User getSource() {
