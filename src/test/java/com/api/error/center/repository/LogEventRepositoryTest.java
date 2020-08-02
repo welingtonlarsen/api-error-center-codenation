@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -37,12 +38,15 @@ public class LogEventRepositoryTest {
         user.setUsername("userForTest");
         user.setPassword("passwordForTest");
         this.user = userRepository.save(user);
+
+        logEventRepository.save(new LogEvent(Level.ERROR, "test", "test",
+                this.user, LocalDateTime.now(), 5));
     }
 
     @Test
-    @WithMockUser
     public void testSave() {
-        LogEvent logEvent = new LogEvent(Level.ERROR, "Test save LogEventRepository", "Test save Log", this.user, LocalDateTime.now(), 5);
+        LogEvent logEvent = new LogEvent(Level.ERROR, "Test save LogEventRepository", "Test save Log",
+                this.user, LocalDateTime.now(), 5);
         LogEvent logEventSaved = logEventRepository.save(logEvent);
 
         Assert.assertNotNull(logEventSaved);
@@ -55,9 +59,20 @@ public class LogEventRepositoryTest {
     }
 
     @Test(expected = ConstraintViolationException.class)
-    @WithMockUser
     public void testSaveIncompletedLogEvent() {
         LogEvent logEvent = new LogEvent();
         logEventRepository.save(logEvent);
+    }
+
+    @Test
+    public void testFindByPresentedId() {
+        Optional<LogEvent> logEvent = logEventRepository.findById(1L);
+        Assert.assertTrue(logEvent.isPresent());
+    }
+
+    @Test
+    public void testFindByUnpresentedId() {
+        Optional<LogEvent> logEvent = logEventRepository.findById(99L);
+        Assert.assertTrue(!logEvent.isPresent());
     }
 }

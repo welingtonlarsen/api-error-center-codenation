@@ -7,6 +7,8 @@ import com.api.error.center.service.LogEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class LogEventServiceImpl implements LogEventService {
 
@@ -16,5 +18,10 @@ public class LogEventServiceImpl implements LogEventService {
     @Override
     public LogEvent save(LogEvent logEvent) {
         return logEventRepository.save(logEvent);
+    }
+
+    @Override
+    public Optional<LogEvent> findById(Long id) {
+        return logEventRepository.findById(id);
     }
 }

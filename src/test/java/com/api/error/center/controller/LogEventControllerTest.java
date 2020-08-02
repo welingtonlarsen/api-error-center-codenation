@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,6 +70,32 @@ public class LogEventControllerTest {
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
+    @Test
+    @WithMockUser
+    public void testFindByPresentedId() throws Exception {
+        BDDMockito.given(logEventService.findById(Mockito.anyLong())).willReturn(Optional.of(getMockedLogEvent()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/log/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isNotEmpty())
+                .andExpect(jsonPath("$.errors").isEmpty());
+    }
+
+    @Test
+    @WithMockUser
+    public void testFindByUnpresentedId() throws Exception {
+        BDDMockito.given(logEventService.findById(Mockito.anyLong())).willReturn(Optional.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/log/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isEmpty())
+                .andExpect(jsonPath("$.errors").isEmpty());
+    }
+
     private LogEvent getMockedLogEvent() {
         User user = new User();
         user.setId(1L);
@@ -98,6 +125,4 @@ public class LogEventControllerTest {
 
         return new ObjectMapper().writeValueAsString(logEventForm);
     }
-
-
 }

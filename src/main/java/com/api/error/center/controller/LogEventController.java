@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/log")
@@ -44,6 +45,20 @@ public class LogEventController {
         response.setData(logEventDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping(value = "/{logEventId}")
+    public ResponseEntity<Response<LogEventDto>> findById(@PathVariable("logEventId") Long logEventId) {
+        Response<LogEventDto> response = new Response<>();
+
+        Optional<LogEvent> logEvent = logEventService.findById(logEventId);
+        if (logEvent.isPresent()) {
+            LogEventDto logEventDto = convertEntityToDto(logEvent.get());
+            response.setData(logEventDto);
+            return ResponseEntity.ok(response);
+        }
+
+        return ResponseEntity.ok(response);
     }
 
     private LogEvent convertFormToEntity(LogEventForm logEventForm, User user) {
