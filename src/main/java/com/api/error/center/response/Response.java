@@ -26,4 +26,11 @@ public class Response<T> {
     public void setErrors(List<String> errors) {
         this.errors = errors;
     }
+
+    public void addError(String error) {
+        if (this.errors == null) {
+            this.errors = new ArrayList<>();
+        }
+       this.errors.add(error);
+    }
 }

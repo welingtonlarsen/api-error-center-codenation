@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class User implements UserDetails {
     private String username;
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<UserProfile> userProfiles = new ArrayList<>();
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private UserProfile userProfile;
 
     public Long getId() {
         return id;
@@ -37,12 +38,18 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public void setUserProfiles(List<UserProfile> userProfiles) {
-        this.userProfiles = userProfiles;
+    public UserProfile getUserProfile() {
+        return this.userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<UserProfile> userProfiles = new ArrayList<>();
+        userProfiles.add(userProfile);
         return userProfiles;
     }
 
@@ -75,4 +82,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

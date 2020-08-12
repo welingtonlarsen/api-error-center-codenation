@@ -36,4 +36,9 @@ public class UserProfile implements GrantedAuthority {
     public String getAuthority() {
         return profileName;
     }
+
+    @Override
+    public String toString() {
+        return profileName;
+    }
 }
