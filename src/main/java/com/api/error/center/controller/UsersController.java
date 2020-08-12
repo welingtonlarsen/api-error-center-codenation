@@ -7,6 +7,7 @@ import com.api.error.center.form.NewUserForm;
 import com.api.error.center.response.Response;
 import com.api.error.center.service.UserProfileService;
 import com.api.error.center.service.UserService;
+import com.api.error.center.util.BCryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +53,10 @@ public class UsersController {
     }
 
     private User convertNewUserFormToEntity(NewUserForm newUserForm, UserProfile userProfile) {
+        String encondedPassword = BCryptUtil.enconde(newUserForm.getPassword());
         User user = new User();
         user.setUsername(newUserForm.getUsername());
-        user.setPassword(newUserForm.getPassword());
+        user.setPassword(encondedPassword);
         user.setUserProfile(userProfile);
         return user;
     }

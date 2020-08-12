@@ -1,6 +1,7 @@
 package com.api.error.center.form;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -25,7 +26,7 @@ public class LogEventForm {
     @NotNull(message = "date must not be null")
     private String date;
 
-    @NotNull(message = "quantity must not be null")
+    @Range(min = 1, message = "minimum quantity must be 1")
     private int quantity;
 
     public String getLevel() {
