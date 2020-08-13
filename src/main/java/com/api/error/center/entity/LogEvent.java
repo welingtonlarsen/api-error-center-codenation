@@ -24,6 +24,7 @@ public class LogEvent {
     private String log;
 
     @ManyToOne
+    @NotNull
     private User source;
 
     @NotNull

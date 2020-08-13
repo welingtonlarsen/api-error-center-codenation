@@ -3,28 +3,39 @@ package com.api.error.center.repository;
 import com.api.error.center.entity.LogEvent;
 import com.api.error.center.entity.User;
 import com.api.error.center.enums.Level;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.*;
+
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class LogEventRepositoryTest {
 
-    private User user;
+    private static final String DESCRIPTION_1 = "Description 1";
+    private static final String DESCRIPTION_2 = "Description 2";
+    private static final String DESCRIPTION_3 = "Description 3";
+
+    private static final String LOG_1 = "Log 1";
+    private static final String LOG_2 = "Log 2";
+    private static final String LOG_3 = "Log 3";
+
+    private static final LocalDateTime DATE_1 = LocalDateTime.of(2020, 8, 5, 15, 30, 50);
+    private static final LocalDateTime DATE_2 = LocalDateTime.of(2020, 6, 25, 9, 50, 15);
+    private static final LocalDateTime DATE_3 = LocalDateTime.of(2020, 8, 5, 17, 35, 40);
+    private static final LocalDateTime DATE_4 = LocalDateTime.of(2020, 5, 3, 15, 30, 50);
 
     @Autowired
     private LogEventRepository logEventRepository;
@@ -32,47 +43,95 @@ public class LogEventRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         User user = new User();
-        user.setUsername("userForTest");
-        user.setPassword("passwordForTest");
-        this.user = userRepository.save(user);
+        user.setUsername("User 1");
+        user.setPassword("Password 1");
+        userRepository.save(user);
 
-        logEventRepository.save(new LogEvent(Level.ERROR, "test", "test",
-                this.user, LocalDateTime.now(), 5));
+        logEventRepository.save(new LogEvent(Level.ERROR, DESCRIPTION_1, LOG_1, user, DATE_1, 5));
+        logEventRepository.save(new LogEvent(Level.WARNING, DESCRIPTION_3, LOG_3, user, DATE_2, 10));
+        logEventRepository.save(new LogEvent(Level.ERROR, DESCRIPTION_1, LOG_2, user, DATE_3, 5));
+        logEventRepository.save(new LogEvent(Level.INFO, DESCRIPTION_2, LOG_3, user, DATE_4, 10));
     }
+
+    @AfterEach
 
     @Test
     public void testSave() {
-        LogEvent logEvent = new LogEvent(Level.ERROR, "Test save LogEventRepository", "Test save Log",
-                this.user, LocalDateTime.now(), 5);
+        Optional<User> user = userRepository.findById(1L);
+
+        LogEvent logEvent = new LogEvent(Level.ERROR, DESCRIPTION_1, LOG_1, user.get(), LocalDateTime.now(), 5);
         LogEvent logEventSaved = logEventRepository.save(logEvent);
 
-        Assert.assertNotNull(logEventSaved);
-        Assert.assertEquals(logEventSaved.getId(), logEvent.getId());
-        Assert.assertEquals(logEventSaved.getLevel(), logEvent.getLevel());
-        Assert.assertEquals(logEventSaved.getDescription(), logEvent.getDescription());
-        Assert.assertEquals(logEventSaved.getSource().getId(), logEvent.getSource().getId());
-        Assert.assertEquals(logEventSaved.getDate(), logEvent.getDate());
-        Assert.assertEquals(logEventSaved.getQuantity(), logEvent.getQuantity());
+        assertNotNull(logEventSaved);
+        assertEquals(logEvent.toString(), logEventSaved.toString());
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void testSaveIncompletedLogEvent() {
-        LogEvent logEvent = new LogEvent();
-        logEventRepository.save(logEvent);
+        assertThrows(ConstraintViolationException.class, () -> {
+            LogEvent logEvent = new LogEvent();
+            logEventRepository.save(logEvent);
+        });
     }
 
     @Test
-    public void testFindByPresentedId() {
+    public void testFindByExistentId() {
         Optional<LogEvent> logEvent = logEventRepository.findById(1L);
-        Assert.assertTrue(logEvent.isPresent());
+        assertTrue(logEvent.isPresent());
     }
 
     @Test
-    public void testFindByUnpresentedId() {
+    public void testFindByNoExistentId() {
         Optional<LogEvent> logEvent = logEventRepository.findById(99L);
-        Assert.assertTrue(!logEvent.isPresent());
+        assertTrue(!logEvent.isPresent());
+    }
+
+    @Test
+    public void testFindAllBetweenDates() {
+        LocalDateTime startDate = LocalDateTime.of(2020, 8, 5, 0, 0, 0);
+        LocalDateTime endDate = LocalDateTime.of(2020, 8, 5, 23, 59, 59);
+
+        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, null, startDate, endDate, null);
+        assertEquals(2, logEvents.size());
+    }
+
+    @Test
+    public void testFindAllByLevel() {
+        List<LogEvent> logEvents = logEventRepository.findAllByFilters(Level.ERROR, null, null, null, null, null, null);
+        assertEquals(2, logEvents.size());
+    }
+
+    @Test
+    public void testFindAllByDescription() {
+        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, DESCRIPTION_1, null, null, null, null, null);
+        assertEquals(2, logEvents.size());
+    }
+
+    @Test
+    public void testFindAllByLog() {
+        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, LOG_1, null, null, null, null);
+        assertEquals(1, logEvents.size());
+    }
+
+    @Test
+    public void testFindAllBySource() {
+        Optional<User> user = userRepository.findById(1L);
+        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, user.get(), null, null, null);
+        assertEquals(4, logEvents.size());
+    }
+
+    @Test
+    public void testFindAllByQuantity() {
+        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, null, null, null, 10);
+        assertEquals(2, logEvents.size());
+    }
+
+    @Test
+    public void testFindAllByNullsFilters() {
+        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, null, null, null, null);
+        assertEquals(4, logEvents.size());
     }
 }

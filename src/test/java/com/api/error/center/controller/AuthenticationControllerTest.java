@@ -1,10 +1,13 @@
 package com.api.error.center.controller;
 
 import com.api.error.center.entity.User;
+import com.api.error.center.entity.UserProfile;
 import com.api.error.center.form.LoginForm;
+import com.api.error.center.repository.UserProfileRepository;
 import com.api.error.center.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -40,6 +43,16 @@ public class AuthenticationControllerTest {
     @Autowired
     MockMvc mvc;
 
+    @Autowired
+    UserProfileRepository userProfileRepository;
+
+    @Before
+    public void setUp() {
+        UserProfile userProfile = new UserProfile();
+        userProfile.setProfileName("ADMIN");
+        userProfileRepository.save(userProfile);
+    }
+
     @Test
     public void testAuthenticationWithValidUser() throws Exception {
         BDDMockito.given(userRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(getMockedUser(this.username, this.password)));
@@ -69,6 +82,7 @@ public class AuthenticationControllerTest {
         user.setId(1L);
         user.setUsername(username);
         user.setPassword(new BCryptPasswordEncoder().encode(password));
+        user.setUserProfile(userProfileRepository.findById(1L).get());
         return user;
     }
 
