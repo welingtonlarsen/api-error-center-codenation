@@ -100,4 +100,16 @@ public class LogEvent {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    @Override
+    public String toString() {
+        return "LogEvent{" +
+                ", level=" + level +
+                ", description='" + description + '\'' +
+                ", log='" + log + '\'' +
+                ", source=" + source +
+                ", date=" + date +
+                ", quantity=" + quantity +
+                '}';
+    }
 }
