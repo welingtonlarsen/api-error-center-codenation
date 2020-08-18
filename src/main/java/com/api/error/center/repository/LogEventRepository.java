@@ -29,5 +29,4 @@ public interface LogEventRepository extends JpaRepository<LogEvent, Long> {
                                     @Param("endDate") LocalDateTime endDate,
                                     @Param("quantity") Integer quantity,
                                     Pageable pageable);
-
 }

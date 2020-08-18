@@ -2,7 +2,7 @@ package com.api.error.center.dto;
 
 import java.time.LocalDateTime;
 
-public class LogEventToListDto {
+public class LogEventDtoToPageble {
 
     private Long id;
     private String level;
@@ -11,11 +11,7 @@ public class LogEventToListDto {
     private LocalDateTime date;
     private int quantity;
 
-    public LogEventToListDto() {
-
-    }
-
-    public LogEventToListDto(Long id, String level, String description, Long userId, LocalDateTime date, int quantity) {
+    public LogEventDtoToPageble(Long id, String level, String description, Long userId, LocalDateTime date, int quantity) {
         this.id = id;
         this.level = level;
         this.description = description;
@@ -36,7 +32,6 @@ public class LogEventToListDto {
         return description;
     }
 
-
     public Long getUserId() {
         return userId;
     }
@@ -48,6 +43,5 @@ public class LogEventToListDto {
     public int getQuantity() {
         return quantity;
     }
-
 
 }

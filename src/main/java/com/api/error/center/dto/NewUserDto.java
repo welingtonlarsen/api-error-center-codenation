@@ -1,12 +1,18 @@
 package com.api.error.center.dto;
 
+import com.api.error.center.entity.User;
+
 public class NewUserDto {
 
     private Long id;
     private String username;
     private String userProfile;
 
-    public NewUserDto(Long id, String username, String userProfile) {
+    public static NewUserDto converSourceToNewUserDto(User source) {
+        return new NewUserDto(source.getId(), source.getUsername(), source.getUserProfile().toString());
+    }
+
+    private NewUserDto(Long id, String username, String userProfile) {
         this.id = id;
         this.username = username;
         this.userProfile = userProfile;

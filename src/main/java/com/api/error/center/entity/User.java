@@ -22,6 +22,16 @@ public class User implements UserDetails {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private UserProfile userProfile;
 
+    public User() {
+
+    }
+
+    public User(String username, String password, UserProfile userProfile) {
+        this.username = username;
+        this.password = password;
+        this.userProfile = userProfile;
+    }
+
     public Long getId() {
         return id;
     }

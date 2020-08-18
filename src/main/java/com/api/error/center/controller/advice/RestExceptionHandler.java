@@ -18,10 +18,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         error = error.substring(0, error.indexOf(":"));
 
         Response<Object> response = new Response<>();
-        response.getErrors().add(error);
+        response.addError(error);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-
-
 }

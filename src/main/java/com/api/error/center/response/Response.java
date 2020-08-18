@@ -1,6 +1,7 @@
 package com.api.error.center.response;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Response<T> {
@@ -16,21 +17,9 @@ public class Response<T> {
         this.data = data;
     }
 
-    public List<String> getErrors() {
-        if (this.errors == null) {
-            this.errors = new ArrayList<>();
-        }
-        return this.errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
-    }
-
     public void addError(String error) {
-        if (this.errors == null) {
-            this.errors = new ArrayList<>();
-        }
-       this.errors.add(error);
+        if (errors == null)
+            errors = new ArrayList<>();
+        errors.add(error);
     }
 }

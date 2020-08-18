@@ -35,16 +35,16 @@ public class UsersController {
         Response<NewUserDto> response = new Response<>();
 
         if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
+            bindingResult.getAllErrors().forEach(error -> response.addError(error.getDefaultMessage()));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         Optional<UserProfile> userProfile = userProfileService.findByProfileName(newUserForm.getProfileName());
 
         if (userProfile.isPresent()) {
-            User newUser = convertNewUserFormToEntity(newUserForm, userProfile.get());
-            newUser = userService.save(newUser);
-            response.setData(converUserToNewUserDto(newUser));
+            User newSource = newUserForm.convertNewUserFormToEntity(newUserForm, userProfile.get());
+            newSource = userService.save(newSource);
+            response.setData(NewUserDto.converSourceToNewUserDto(newSource));
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } else {
             response.addError("There isn't this User Profile. Please, contact with administration.");
@@ -52,16 +52,4 @@ public class UsersController {
         }
     }
 
-    private User convertNewUserFormToEntity(NewUserForm newUserForm, UserProfile userProfile) {
-        String encondedPassword = BCryptUtil.enconde(newUserForm.getPassword());
-        User user = new User();
-        user.setUsername(newUserForm.getUsername());
-        user.setPassword(encondedPassword);
-        user.setUserProfile(userProfile);
-        return user;
-    }
-
-    private NewUserDto converUserToNewUserDto(User user) {
-        return new NewUserDto(user.getId(), user.getUsername(), user.getUserProfile().toString());
-    }
 }

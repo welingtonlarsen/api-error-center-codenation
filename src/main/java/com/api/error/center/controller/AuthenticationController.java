@@ -33,16 +33,12 @@ public class AuthenticationController {
         try {
             Authentication authentication = authenticationManager.authenticate(login);
             String token = tokenService.generateToken(authentication);
-
             TokenDto tokenDto = new TokenDto(token, "Bearer");
             response.setData(tokenDto);
-
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
         } catch (AuthenticationException e) {
-            response.getErrors().add("Incorrect login and/or password");
-
+            response.addError("Incorrect login and/or password");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
-
 }
