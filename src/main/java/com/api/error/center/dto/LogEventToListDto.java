@@ -1,28 +1,24 @@
 package com.api.error.center.dto;
 
-import sun.rmi.runtime.Log;
-
 import java.time.LocalDateTime;
 
-public class LogEventDto {
+public class LogEventToListDto {
 
     private Long id;
     private String level;
     private String description;
-    private String log;
     private Long userId;
     private LocalDateTime date;
     private int quantity;
 
-    public LogEventDto() {
+    public LogEventToListDto() {
 
     }
 
-    public LogEventDto(Long id, String level, String description, String log, Long userId, LocalDateTime date, int quantity) {
+    public LogEventToListDto(Long id, String level, String description, Long userId, LocalDateTime date, int quantity) {
         this.id = id;
         this.level = level;
         this.description = description;
-        this.log = log;
         this.userId = userId;
         this.date = date;
         this.quantity = quantity;
@@ -40,9 +36,6 @@ public class LogEventDto {
         return description;
     }
 
-    public String getLog() {
-        return log;
-    }
 
     public Long getUserId() {
         return userId;
@@ -55,4 +48,6 @@ public class LogEventDto {
     public int getQuantity() {
         return quantity;
     }
+
+
 }

@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 public class LogEventServiceTest {
 
+    /*
     private static LogEvent mockedLogEventA;
     private static LogEvent mockedLogEventB;
     private static LogEvent mockedLogEventC;
@@ -150,4 +151,6 @@ public class LogEventServiceTest {
     private String transformLogEventInJson(LogEvent logEvent) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(logEvent);
     }
+
+     */
 }
