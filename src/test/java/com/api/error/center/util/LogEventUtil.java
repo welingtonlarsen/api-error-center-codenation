@@ -1,8 +1,15 @@
 package com.api.error.center.util;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
 
 public class LogEventUtil {
+
+    public static final LocalDateTime startDate = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
+    public static LocalDateTime endDate = LocalDateTime.now();
+    public static Pageable pageable = PageRequest.of(0, 10);
 
     public static final String DESCRIPTION_A = "Description A";
     public static final String DESCRIPTION_B = "Description B";

@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static com.api.error.center.util.LogEventUtil.*;
@@ -25,9 +27,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class LogEventRepositoryTest {
-
-    /*
-
 
     @Autowired
     private LogEventRepository logEventRepository;
@@ -84,46 +83,45 @@ public class LogEventRepositoryTest {
         LocalDateTime startDate = LocalDateTime.of(2020, 8, 5, 0, 0, 0);
         LocalDateTime endDate = LocalDateTime.of(2020, 8, 5, 23, 59, 59);
 
-        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, null, startDate, endDate, null);
-        assertEquals(2, logEvents.size());
+        Page<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, null, startDate, endDate, null, pageable);
+        assertEquals(2, logEvents.getTotalElements());
     }
 
     @Test
     public void testFindAllByLevel() {
-        List<LogEvent> logEvents = logEventRepository.findAllByFilters(Level.ERROR, null, null, null, null, null, null);
-        assertEquals(2, logEvents.size());
+        Page<LogEvent> logEvents = logEventRepository.findAllByFilters(Level.ERROR, null, null, null, startDate, endDate, null, pageable);
+        assertEquals(2, logEvents.getTotalElements());
     }
 
     @Test
     public void testFindAllByDescription() {
-        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, DESCRIPTION_A, null, null, null, null, null);
-        assertEquals(2, logEvents.size());
+        Page<LogEvent> logEvents = logEventRepository.findAllByFilters(null, DESCRIPTION_A, null, null, startDate, endDate, null, pageable);
+        assertEquals(2, logEvents.getTotalElements());
     }
 
     @Test
     public void testFindAllByLog() {
-        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, LOG_A, null, null, null, null);
-        assertEquals(1, logEvents.size());
+        Page<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, LOG_A, null, startDate, endDate, null, pageable);
+        assertEquals(1, logEvents.getTotalElements());
     }
 
     @Test
     public void testFindAllBySource() {
         Optional<User> user = userRepository.findById(1L);
-        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, user.get(), null, null, null);
-        assertEquals(4, logEvents.size());
+        Page<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, user.get(), startDate, endDate, null, pageable);
+        assertEquals(4, logEvents.getTotalElements());
     }
 
     @Test
     public void testFindAllByQuantity() {
-        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, null, null, null, 10);
-        assertEquals(2, logEvents.size());
+        Page<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, null, startDate, endDate, 10, pageable);
+        assertEquals(2, logEvents.getTotalElements());
     }
 
     @Test
     public void testFindAllByNullsFilters() {
-        List<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, null, null, null, null);
-        assertEquals(4, logEvents.size());
+        Page<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, null, startDate, endDate, null, pageable);
+        assertEquals(4, logEvents.getTotalElements());
     }
 
-     */
 }
