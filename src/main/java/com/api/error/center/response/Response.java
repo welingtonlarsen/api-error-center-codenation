@@ -13,6 +13,10 @@ public class Response<T> {
         return data;
     }
 
+    public List<String> getErrors() {
+        return errors;
+    }
+
     public void setData(T data) {
         this.data = data;
     }

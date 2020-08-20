@@ -53,7 +53,7 @@ public class LogEventControllerTest {
                 .andExpect(jsonPath("$.data.level").isNotEmpty())
                 .andExpect(jsonPath("$.data.description").isNotEmpty())
                 .andExpect(jsonPath("$.data.log").isNotEmpty())
-                .andExpect(jsonPath("$.data.userId").isNotEmpty())
+                .andExpect(jsonPath("$.data.sourceId").isNotEmpty())
                 .andExpect(jsonPath("$.data.date").isNotEmpty())
                 .andExpect(jsonPath("$.data.quantity").isNotEmpty())
                 .andExpect(jsonPath("$.errors").isEmpty());

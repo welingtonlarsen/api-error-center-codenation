@@ -36,7 +36,7 @@ public class LogEventServiceImpl implements LogEventService {
             startDate = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
         }
         if (endDate == null) {
-            endDate = LocalDateTime.now();
+            endDate = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(0);
         }
 
         return logEventRepository.findAllByFilters(level, description, log, source, startDate, endDate, quantity, pageable);

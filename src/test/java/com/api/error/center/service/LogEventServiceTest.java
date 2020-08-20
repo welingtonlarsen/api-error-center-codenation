@@ -5,6 +5,7 @@ import com.api.error.center.entity.User;
 import com.api.error.center.enums.Level;
 import com.api.error.center.repository.LogEventRepository;
 
+import com.api.error.center.util.LogEventTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,21 +15,23 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.api.error.center.util.LogEventUtil.*;
+import static com.api.error.center.util.LogEventTest.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class LogEventServiceTest {
+public class LogEventServiceTest extends LogEventTest {
 
-    /*
     private static LogEvent mockedLogEventA;
     private static LogEvent mockedLogEventB;
     private static LogEvent mockedLogEventC;
@@ -84,73 +87,50 @@ public class LogEventServiceTest {
 
     @Test
     public void testFindAllBetweenDates() {
-        BDDMockito.given(logEventRepository.findAllByFilters(null, null, null, null, DATE_A, DATE_B, null))
-                .willReturn(getLogEventMockedList());
-        List<LogEvent> logEvents = logEventService.findAllByFilters(null, null, null, null, DATE_A, DATE_B, null);
-        assertEquals(mockedLogEventA, logEvents.get(0));
-        assertEquals(mockedLogEventB, logEvents.get(1));
-        assertEquals(mockedLogEventC, logEvents.get(2));
-        assertEquals(mockedLogEventD, logEvents.get(3));
+        BDDMockito.given(logEventRepository.findAllByFilters(null, null, null, null, DATE_A, DATE_B, null, pageable))
+                .willReturn(getLogEventMockedPage());
+        Page<LogEvent> logEvents = logEventService.findAllByFilters(null, null, null, null, DATE_A, DATE_B, null, pageable);
+        assertEquals(4, logEvents.getTotalElements());
     }
 
     @Test
     public void testFindAllByLevel() {
-        BDDMockito.given(logEventRepository.findAllByFilters(Level.ERROR, null, null, null, null, null, null))
-                .willReturn(getLogEventMockedList());
-        List<LogEvent> logEvents = logEventService.findAllByFilters(Level.ERROR, null, null, null, null, null, null);
-        assertEquals(mockedLogEventA, logEvents.get(0));
-        assertEquals(mockedLogEventB, logEvents.get(1));
-        assertEquals(mockedLogEventC, logEvents.get(2));
-        assertEquals(mockedLogEventD, logEvents.get(3));
+        Mockito.doReturn(getLogEventMockedPage()).when(logEventRepository).findAllByFilters(Level.ERROR, null, null, null, startDate, endDate, null, pageable);
+        Page<LogEvent> logEvents = logEventService.findAllByFilters(Level.ERROR, null, null, null, null, null, null, pageable);
+        assertEquals(4, logEvents.getTotalElements());
     }
 
     @Test
     public void testFindAllBySource() {
         User source = new User();
         source.setId(1L);
-        BDDMockito.given(logEventRepository.findAllByFilters(null, null, null, source, null, null, null))
-                .willReturn(getLogEventMockedList());
-        List<LogEvent> logEvents = logEventService.findAllByFilters(null, null, null, source, null, null, null);
-        assertEquals(mockedLogEventA, logEvents.get(0));
-        assertEquals(mockedLogEventB, logEvents.get(1));
-        assertEquals(mockedLogEventC, logEvents.get(2));
-        assertEquals(mockedLogEventD, logEvents.get(3));
+        Mockito.doReturn(getLogEventMockedPage()).when(logEventRepository).findAllByFilters(null, null, null, source, startDate, endDate, null, pageable);
+        Page<LogEvent> logEvents = logEventService.findAllByFilters(null, null, null, source, null, null, null, pageable);
+        assertEquals(4, logEvents.getTotalElements());
     }
 
     @Test
     public void testFindAllByQuantity() {
-        BDDMockito.given(logEventRepository.findAllByFilters(null, null, null, null, null, null, 10))
-                .willReturn(getLogEventMockedList());
-        List<LogEvent> logEvents = logEventService.findAllByFilters(null, null, null, null, null, null, 10);
-        assertEquals(mockedLogEventA, logEvents.get(0));
-        assertEquals(mockedLogEventB, logEvents.get(1));
-        assertEquals(mockedLogEventC, logEvents.get(2));
-        assertEquals(mockedLogEventD, logEvents.get(3));
+        Mockito.doReturn(getLogEventMockedPage()).when(logEventRepository).findAllByFilters(null, null, null, null, startDate, endDate, 10, pageable);
+        Page<LogEvent> logEvents = logEventService.findAllByFilters(null, null, null, null, null, null, 10, pageable);
+        assertEquals(4, logEvents.getTotalElements());
     }
 
     @Test
     public void testFindAllByNullsFilters() {
-        BDDMockito.given(logEventRepository.findAllByFilters(null, null, null, null, null, null, null))
-                .willReturn(getLogEventMockedList());
-        List<LogEvent> logEvents = logEventService.findAllByFilters(null, null, null, null, null, null, null);
-        assertEquals(mockedLogEventA, logEvents.get(0));
-        assertEquals(mockedLogEventB, logEvents.get(1));
-        assertEquals(mockedLogEventC, logEvents.get(2));
-        assertEquals(mockedLogEventD, logEvents.get(3));
+        Mockito.doReturn(getLogEventMockedPage()).when(logEventRepository).findAllByFilters(null, null, null, null, startDate, endDate, null, pageable);
+        Page<LogEvent> logEvents = logEventService.findAllByFilters(null, null, null, null, null, null, null, pageable);
+        assertEquals(4, logEvents.getTotalElements());
     }
 
-    private List<LogEvent> getLogEventMockedList() {
-        List<LogEvent> logEvents = new ArrayList<>();
-        logEvents.add(mockedLogEventA);
-        logEvents.add(mockedLogEventB);
-        logEvents.add(mockedLogEventC);
-        logEvents.add(mockedLogEventD);
-        return logEvents;
+    private Page<LogEvent> getLogEventMockedPage() {
+        List<LogEvent> logEvents = Arrays.asList(mockedLogEventA, mockedLogEventB, mockedLogEventC, mockedLogEventD);
+        Page<LogEvent> logEventsPage = new PageImpl<>(logEvents, pageable, logEvents.size());
+        return logEventsPage;
     }
 
     private String transformLogEventInJson(LogEvent logEvent) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(logEvent);
     }
 
-     */
 }

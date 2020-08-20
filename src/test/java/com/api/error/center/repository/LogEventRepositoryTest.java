@@ -4,14 +4,13 @@ import com.api.error.center.entity.LogEvent;
 import com.api.error.center.entity.User;
 import com.api.error.center.enums.Level;
 
+import com.api.error.center.util.LogEventTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -19,14 +18,14 @@ import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.api.error.center.util.LogEventUtil.*;
+import static com.api.error.center.util.LogEventTest.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class LogEventRepositoryTest {
+public class LogEventRepositoryTest extends LogEventTest {
 
     @Autowired
     private LogEventRepository logEventRepository;
