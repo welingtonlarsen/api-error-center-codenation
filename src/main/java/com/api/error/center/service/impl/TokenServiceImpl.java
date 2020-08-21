@@ -1,6 +1,6 @@
 package com.api.error.center.service.impl;
 
-import com.api.error.center.entity.User;
+import com.api.error.center.entity.Source;
 import com.api.error.center.service.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,13 +22,13 @@ public class TokenServiceImpl implements TokenService {
     private String secret;
 
     public String generateToken(Authentication authentication) {
-        User authenticatedUser = (User) authentication.getPrincipal();
+        Source authenticatedSource = (Source) authentication.getPrincipal();
         Date currentDate = new Date();
         Date expirationDate = new Date(currentDate.getTime() + Long.parseLong(expiration));
 
         return Jwts.builder()
                 .setIssuer("API Error Center Codenation")
-                .setSubject(authenticatedUser.getId().toString())
+                .setSubject(authenticatedSource.getId().toString())
                 .setIssuedAt(currentDate)
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, secret)

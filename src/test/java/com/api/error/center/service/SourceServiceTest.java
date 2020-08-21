@@ -1,6 +1,6 @@
 package com.api.error.center.service;
 
-import com.api.error.center.entity.User;
+import com.api.error.center.entity.Source;
 import com.api.error.center.repository.UserRepository;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,9 +22,9 @@ import java.util.Optional;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-public class UserServiceTest {
+public class SourceServiceTest {
 
-    private User user;
+    private Source source;
 
     @MockBean
     private UserRepository mockedUserRepository;
@@ -34,16 +34,16 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
-        this.user = new User();
-        user.setUsername("admin");
+        this.source = new Source();
+        source.setUsername("admin");
     }
 
     @Test
     @WithMockUser
     public void testFindByUsername() {
-        BDDMockito.given(mockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.user));
+        BDDMockito.given(mockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.source));
 
-        Optional<User> response = userService.findByUsername("admin");
+        Optional<Source> response = userService.findByUsername("admin");
         Assert.assertTrue(response.isPresent());
         Assert.assertEquals("admin", response.get().getUsername());
     }
@@ -51,10 +51,10 @@ public class UserServiceTest {
     @Test
     @WithMockUser
     public void testLoadUserByValidUsername() {
-        BDDMockito.given(mockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.user));
-        UserDetails response = this.userService.loadUserByUsername(user.getUsername());
+        BDDMockito.given(mockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.source));
+        UserDetails response = this.userService.loadUserByUsername(source.getUsername());
 
-        Assert.assertEquals(response.getUsername(), this.user.getUsername());
+        Assert.assertEquals(response.getUsername(), this.source.getUsername());
     }
 
     @Test(expected = UsernameNotFoundException.class)

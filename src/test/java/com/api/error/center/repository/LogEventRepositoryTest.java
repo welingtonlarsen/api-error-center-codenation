@@ -1,7 +1,7 @@
 package com.api.error.center.repository;
 
 import com.api.error.center.entity.LogEvent;
-import com.api.error.center.entity.User;
+import com.api.error.center.entity.Source;
 import com.api.error.center.enums.Level;
 
 import com.api.error.center.util.LogEventTest;
@@ -18,7 +18,6 @@ import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.api.error.center.util.LogEventTest.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -35,20 +34,20 @@ public class LogEventRepositoryTest extends LogEventTest {
 
     @BeforeEach
     public void setUp() {
-        User user = new User();
-        user.setUsername("User 1");
-        user.setPassword("Password 1");
-        userRepository.save(user);
+        Source source = new Source();
+        source.setUsername("User 1");
+        source.setPassword("Password 1");
+        userRepository.save(source);
 
-        logEventRepository.save(new LogEvent(Level.ERROR, DESCRIPTION_A, LOG_A, user, DATE_A, 5));
-        logEventRepository.save(new LogEvent(Level.WARNING, DESCRIPTION_C, LOG_C, user, DATE_B, 10));
-        logEventRepository.save(new LogEvent(Level.ERROR, DESCRIPTION_A, LOG_B, user, DATE_C, 5));
-        logEventRepository.save(new LogEvent(Level.INFO, DESCRIPTION_B, LOG_C, user, DATE_D, 10));
+        logEventRepository.save(new LogEvent(Level.ERROR, DESCRIPTION_A, LOG_A, source, DATE_A, 5));
+        logEventRepository.save(new LogEvent(Level.WARNING, DESCRIPTION_C, LOG_C, source, DATE_B, 10));
+        logEventRepository.save(new LogEvent(Level.ERROR, DESCRIPTION_A, LOG_B, source, DATE_C, 5));
+        logEventRepository.save(new LogEvent(Level.INFO, DESCRIPTION_B, LOG_C, source, DATE_D, 10));
     }
 
     @Test
     public void testSave() {
-        Optional<User> user = userRepository.findById(1L);
+        Optional<Source> user = userRepository.findById(1L);
 
         LogEvent logEvent = new LogEvent(Level.ERROR, DESCRIPTION_A, LOG_A, user.get(), LocalDateTime.now(), 5);
         LogEvent logEventSaved = logEventRepository.save(logEvent);
@@ -106,7 +105,7 @@ public class LogEventRepositoryTest extends LogEventTest {
 
     @Test
     public void testFindAllBySource() {
-        Optional<User> user = userRepository.findById(1L);
+        Optional<Source> user = userRepository.findById(1L);
         Page<LogEvent> logEvents = logEventRepository.findAllByFilters(null, null, null, user.get(), startDate, endDate, null, pageable);
         assertEquals(4, logEvents.getTotalElements());
     }

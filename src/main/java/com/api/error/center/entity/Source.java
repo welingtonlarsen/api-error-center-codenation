@@ -5,12 +5,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
-public class User implements UserDetails {
+public class Source implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,16 +19,16 @@ public class User implements UserDetails {
     private String password;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private UserProfile userProfile;
+    private SourceProfile sourceProfile;
 
-    public User() {
+    public Source() {
 
     }
 
-    public User(String username, String password, UserProfile userProfile) {
+    public Source(String username, String password, SourceProfile sourceProfile) {
         this.username = username;
         this.password = password;
-        this.userProfile = userProfile;
+        this.sourceProfile = sourceProfile;
     }
 
     public Long getId() {
@@ -48,19 +47,19 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public UserProfile getUserProfile() {
-        return this.userProfile;
+    public SourceProfile getSourceProfile() {
+        return this.sourceProfile;
     }
 
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
+    public void setSourceProfile(SourceProfile sourceProfile) {
+        this.sourceProfile = sourceProfile;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<UserProfile> userProfiles = new ArrayList<>();
-        userProfiles.add(userProfile);
-        return userProfiles;
+        List<SourceProfile> sourceProfiles = new ArrayList<>();
+        sourceProfiles.add(sourceProfile);
+        return sourceProfiles;
     }
 
     @Override

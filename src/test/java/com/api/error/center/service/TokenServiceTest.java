@@ -1,6 +1,6 @@
 package com.api.error.center.service;
 
-import com.api.error.center.entity.User;
+import com.api.error.center.entity.Source;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,16 +25,16 @@ public class TokenServiceTest {
 
     @Test
     public void testGenerateToken() {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("username");
-        user.setPassword("password");
+        Source source = new Source();
+        source.setId(1L);
+        source.setUsername("username");
+        source.setPassword("password");
 
-        BDDMockito.given(authentication.getPrincipal()).willReturn(user);
+        BDDMockito.given(authentication.getPrincipal()).willReturn(source);
         String token = tokenService.generateToken(this.authentication);
 
         Assert.assertNotNull(token);
         Assert.assertTrue(tokenService.validToken(token));
-        Assert.assertEquals(tokenService.getUserIdFromToken(token), user.getId());
+        Assert.assertEquals(tokenService.getUserIdFromToken(token), source.getId());
     }
 }

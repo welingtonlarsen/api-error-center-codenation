@@ -4,7 +4,7 @@ import com.api.error.center.controller.validation.LogEventControllerValidations;
 import com.api.error.center.dto.LogEventDto;
 import com.api.error.center.dto.LogEventDtoToPageble;
 import com.api.error.center.entity.LogEvent;
-import com.api.error.center.entity.User;
+import com.api.error.center.entity.Source;
 import com.api.error.center.enums.Level;
 import com.api.error.center.form.LogEventForm;
 import com.api.error.center.response.Response;
@@ -37,7 +37,7 @@ public class LogEventController extends LogEventControllerValidations {
     private UserService sourceService;
 
     @PostMapping
-    public ResponseEntity<Response<LogEventDto>> createLogEvent(@RequestBody @Valid LogEventForm logEventForm, BindingResult bindingResult, @AuthenticationPrincipal User source) {
+    public ResponseEntity<Response<LogEventDto>> createLogEvent(@RequestBody @Valid LogEventForm logEventForm, BindingResult bindingResult, @AuthenticationPrincipal Source source) {
         Response<LogEventDto> response = new Response<>();
 
         if (bindingResult.hasErrors()) {
@@ -74,10 +74,10 @@ public class LogEventController extends LogEventControllerValidations {
                                                                                  @RequestParam(required = false) String startDateIn,
                                                                                  @RequestParam(required = false) String endDateIn,
                                                                                  @RequestParam(required = false) Integer quantity,
-                                                                                 @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
+                                                                                 @PageableDefault/*(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10)*/ Pageable pageable) {
         Response<Page<LogEventDtoToPageble>> response = new Response<>();
 
-        User source = getSourceFromRequestParam(sourceId);
+        Source source = getSourceFromRequestParam(sourceId);
         if (!validateFindAllByFiltersRequestParams(sourceId, source, startDateIn, endDateIn, response))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
@@ -100,10 +100,10 @@ public class LogEventController extends LogEventControllerValidations {
         return pageLogEventDto;
     }
 
-    private User getSourceFromRequestParam(Long sourceId) {
-        User user = null;
+    private Source getSourceFromRequestParam(Long sourceId) {
+        Source user = null;
         if (sourceId != null) {
-            Optional<User> source = sourceService.findById(sourceId);
+            Optional<Source> source = sourceService.findById(sourceId);
             user = source.isPresent() ? source.get() : null;
         }
         return user;

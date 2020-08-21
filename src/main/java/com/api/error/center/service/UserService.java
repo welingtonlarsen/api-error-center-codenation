@@ -1,16 +1,16 @@
 package com.api.error.center.service;
 
-import com.api.error.center.entity.User;
+import com.api.error.center.entity.Source;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
-    Optional<User> findByUsername(String username);
+    Optional<Source> findByUsername(String username);
 
-    Optional<User> findById(Long userId);
+    Optional<Source> findById(Long userId);
 
-    User save(User user);
+    Source save(Source source);
 
 }

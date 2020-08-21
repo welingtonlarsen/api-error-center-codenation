@@ -1,6 +1,6 @@
 package com.api.error.center.repository;
 
-import com.api.error.center.entity.User;
+import com.api.error.center.entity.Source;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +16,9 @@ import java.util.Optional;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-public class UserRepositoryTest {
+public class SourceRepositoryTest {
 
-    private User user;
+    private Source source;
 
     @Autowired
     private UserRepository userRepository;
@@ -28,30 +28,30 @@ public class UserRepositoryTest {
 
     @Before
     public void setUp() {
-        this.user = new User();
-        user.setPassword("admin");
-        user.setUsername("admin");
+        this.source = new Source();
+        source.setPassword("admin");
+        source.setUsername("admin");
     }
 
     @Test
     @WithMockUser
     public void testSave() {
-        User response = userRepository.save(this.user);
+        Source response = userRepository.save(this.source);
         Assert.assertNotNull(response);
     }
 
     @Test
     @WithMockUser
     public void testFindByUsername() {
-        User userToFind = new User();
-        user.setPassword("userToFind");
-        user.setUsername("userToFind");
-        userRepository.save(userToFind);
-        Optional<User> response = userRepository.findByUsername(userToFind.getUsername());
+        Source sourceToFind = new Source();
+        source.setPassword("userToFind");
+        source.setUsername("userToFind");
+        userRepository.save(sourceToFind);
+        Optional<Source> response = userRepository.findByUsername(sourceToFind.getUsername());
 
         Assert.assertTrue(response.isPresent());
-        Assert.assertEquals(response.get().getUsername(), userToFind.getUsername());
-        Assert.assertEquals(response.get().getPassword(), userToFind.getPassword());
+        Assert.assertEquals(response.get().getUsername(), sourceToFind.getUsername());
+        Assert.assertEquals(response.get().getPassword(), sourceToFind.getPassword());
     }
 }
 

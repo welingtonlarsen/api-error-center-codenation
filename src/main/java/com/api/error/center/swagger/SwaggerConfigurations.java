@@ -1,5 +1,6 @@
 package com.api.error.center.swagger;
 
+import com.api.error.center.entity.Source;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ParameterBuilder;
@@ -21,7 +22,7 @@ public class SwaggerConfigurations {
                 .apis(RequestHandlerSelectors.basePackage("com.api.error.center"))
                 .paths(PathSelectors.ant("/**"))
                 .build()
-                //.ignoredParameterTypes(Usuario.class)
+                .ignoredParameterTypes(Source.class)
                 .globalOperationParameters(Arrays.asList(
                         new ParameterBuilder()
                                 .name("Authorization")

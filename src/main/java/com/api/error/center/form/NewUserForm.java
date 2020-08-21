@@ -1,7 +1,7 @@
 package com.api.error.center.form;
 
-import com.api.error.center.entity.User;
-import com.api.error.center.entity.UserProfile;
+import com.api.error.center.entity.Source;
+import com.api.error.center.entity.SourceProfile;
 import com.api.error.center.util.BCryptUtil;
 
 import javax.validation.constraints.NotNull;
@@ -21,7 +21,7 @@ public class NewUserForm extends UserForm {
         this.profileName = profileName;
     }
 
-    public User convertNewUserFormToEntity(NewUserForm newUserForm, UserProfile userProfile) {
-        return new User(username, BCryptUtil.enconde(password), userProfile);
+    public Source convertNewUserFormToEntity(NewUserForm newUserForm, SourceProfile sourceProfile) {
+        return new Source(username, BCryptUtil.enconde(password), sourceProfile);
     }
 }

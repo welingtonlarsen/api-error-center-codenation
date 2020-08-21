@@ -1,17 +1,13 @@
 package com.api.error.center.form;
 
 import com.api.error.center.entity.LogEvent;
-import com.api.error.center.entity.User;
+import com.api.error.center.entity.Source;
 import com.api.error.center.enums.Level;
 import com.api.error.center.util.DateUtil;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 public class LogEventForm {
 
@@ -73,7 +69,7 @@ public class LogEventForm {
         this.quantity = quantity;
     }
 
-    public LogEvent convertFormToEntity(LogEventForm logEventForm, User source) {
+    public LogEvent convertFormToEntity(LogEventForm logEventForm, Source source) {
         return new LogEvent(Level.valueOf(level), description, log, source, DateUtil.convertStringToLocalDateTime(date), quantity);
     }
 }

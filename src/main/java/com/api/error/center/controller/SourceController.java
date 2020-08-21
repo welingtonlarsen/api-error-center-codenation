@@ -1,13 +1,12 @@
 package com.api.error.center.controller;
 
 import com.api.error.center.dto.NewUserDto;
-import com.api.error.center.entity.User;
-import com.api.error.center.entity.UserProfile;
+import com.api.error.center.entity.Source;
+import com.api.error.center.entity.SourceProfile;
 import com.api.error.center.form.NewUserForm;
 import com.api.error.center.response.Response;
-import com.api.error.center.service.UserProfileService;
+import com.api.error.center.service.SourceProfileService;
 import com.api.error.center.service.UserService;
-import com.api.error.center.util.BCryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +21,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
-public class UsersController {
+public class SourceController {
 
     @Autowired
-    UserService userService;
+    UserService sourceService;
 
     @Autowired
-    UserProfileService userProfileService;
+    SourceProfileService sourceProfileService;
 
     @PostMapping
     public ResponseEntity<Response<NewUserDto>> createUser(@RequestBody @Valid NewUserForm newUserForm, BindingResult bindingResult) {
@@ -39,11 +38,11 @@ public class UsersController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        Optional<UserProfile> userProfile = userProfileService.findByProfileName(newUserForm.getProfileName());
+        Optional<SourceProfile> sourceProfile = sourceProfileService.findByProfileName(newUserForm.getProfileName());
 
-        if (userProfile.isPresent()) {
-            User newSource = newUserForm.convertNewUserFormToEntity(newUserForm, userProfile.get());
-            newSource = userService.save(newSource);
+        if (sourceProfile.isPresent()) {
+            Source newSource = newUserForm.convertNewUserFormToEntity(newUserForm, sourceProfile.get());
+            newSource = sourceService.save(newSource);
             response.setData(NewUserDto.converSourceToNewUserDto(newSource));
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } else {

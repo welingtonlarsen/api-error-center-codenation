@@ -1,7 +1,7 @@
 package com.api.error.center.controller;
 
-import com.api.error.center.entity.User;
-import com.api.error.center.entity.UserProfile;
+import com.api.error.center.entity.Source;
+import com.api.error.center.entity.SourceProfile;
 import com.api.error.center.form.LoginForm;
 import com.api.error.center.repository.UserProfileRepository;
 import com.api.error.center.repository.UserRepository;
@@ -48,9 +48,9 @@ public class AuthenticationControllerTest {
 
     @Before
     public void setUp() {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setProfileName("ADMIN");
-        userProfileRepository.save(userProfile);
+        SourceProfile sourceProfile = new SourceProfile();
+        sourceProfile.setProfileName("ADMIN");
+        userProfileRepository.save(sourceProfile);
     }
 
     @Test
@@ -77,13 +77,13 @@ public class AuthenticationControllerTest {
                 .andExpect(jsonPath("$.data").doesNotExist());
     }
 
-    private User getMockedUser(String username, String password) {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername(username);
-        user.setPassword(new BCryptPasswordEncoder().encode(password));
-        user.setUserProfile(userProfileRepository.findById(1L).get());
-        return user;
+    private Source getMockedUser(String username, String password) {
+        Source source = new Source();
+        source.setId(1L);
+        source.setUsername(username);
+        source.setPassword(new BCryptPasswordEncoder().encode(password));
+        source.setSourceProfile(userProfileRepository.findById(1L).get());
+        return source;
     }
 
     private String getJsonPayload(String login, String password) throws JsonProcessingException {

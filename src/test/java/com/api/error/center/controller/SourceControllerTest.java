@@ -1,9 +1,9 @@
 package com.api.error.center.controller;
 
-import com.api.error.center.entity.User;
-import com.api.error.center.entity.UserProfile;
+import com.api.error.center.entity.Source;
+import com.api.error.center.entity.SourceProfile;
 import com.api.error.center.form.NewUserForm;
-import com.api.error.center.service.UserProfileService;
+import com.api.error.center.service.SourceProfileService;
 import com.api.error.center.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,13 +30,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class UserControllerTest {
+public class SourceControllerTest {
 
     @MockBean
     UserService userService;
 
     @MockBean
-    UserProfileService userProfileService;
+    SourceProfileService sourceProfileService;
 
     @Autowired
     MockMvc mockMvc;
@@ -44,8 +44,8 @@ public class UserControllerTest {
     @Test
     @WithMockUser(authorities = {"ADMIN"})
     public void testCreateValidUser() throws Exception {
-        BDDMockito.given(userProfileService.findByProfileName(Mockito.anyString())).willReturn(Optional.of(getMockedUserProfile()));
-        BDDMockito.given(userService.save(Mockito.any(User.class))).willReturn(getMockedUser());
+        BDDMockito.given(sourceProfileService.findByProfileName(Mockito.anyString())).willReturn(Optional.of(getMockedUserProfile()));
+        BDDMockito.given(userService.save(Mockito.any(Source.class))).willReturn(getMockedUser());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user").content(getValidUserFormPayLoad())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -60,19 +60,19 @@ public class UserControllerTest {
         return new ObjectMapper().writeValueAsString(userForm);
     }
 
-    private User getMockedUser() {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("mocked user");
-        user.setPassword("mockeduser");
-        user.setUserProfile(getMockedUserProfile());
-        return user;
+    private Source getMockedUser() {
+        Source source = new Source();
+        source.setId(1L);
+        source.setUsername("mocked user");
+        source.setPassword("mockeduser");
+        source.setSourceProfile(getMockedUserProfile());
+        return source;
     }
 
-    private UserProfile getMockedUserProfile() {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setId(1L);
-        userProfile.setProfileName("Profile Test");
-        return userProfile;
+    private SourceProfile getMockedUserProfile() {
+        SourceProfile sourceProfile = new SourceProfile();
+        sourceProfile.setId(1L);
+        sourceProfile.setProfileName("Profile Test");
+        return sourceProfile;
     }
 }

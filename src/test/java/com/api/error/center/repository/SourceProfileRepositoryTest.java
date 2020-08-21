@@ -1,6 +1,6 @@
 package com.api.error.center.repository;
 
-import com.api.error.center.entity.UserProfile;
+import com.api.error.center.entity.SourceProfile;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,31 +15,31 @@ import java.util.Optional;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-public class UserProfileRepositoryTest {
+public class SourceProfileRepositoryTest {
 
     @Autowired
     private UserProfileRepository userProfileRepository;
 
     @Before
     public void setUp() {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setProfileName("mockedProfile");
-        UserProfile response = userProfileRepository.save(userProfile);
+        SourceProfile sourceProfile = new SourceProfile();
+        sourceProfile.setProfileName("mockedProfile");
+        SourceProfile response = userProfileRepository.save(sourceProfile);
     }
 
     @Test
     public void testSave() {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setProfileName("test profile");
-        UserProfile response = userProfileRepository.save(userProfile);
+        SourceProfile sourceProfile = new SourceProfile();
+        sourceProfile.setProfileName("test profile");
+        SourceProfile response = userProfileRepository.save(sourceProfile);
 
         Assert.assertNotNull(response);
-        Assert.assertEquals(response.getProfileName(), userProfile.getProfileName());
+        Assert.assertEquals(response.getProfileName(), sourceProfile.getProfileName());
     }
 
     @Test
     public void testFindById() {
-        Optional<UserProfile> userProfile = userProfileRepository.findById(1L);
+        Optional<SourceProfile> userProfile = userProfileRepository.findById(1L);
         Assert.assertNotNull(userProfile);
         Assert.assertEquals(new Long(1), userProfile.get().getId());
         Assert.assertEquals("mockedProfile", userProfile.get().getAuthority());
@@ -47,7 +47,7 @@ public class UserProfileRepositoryTest {
 
     @Test
     public void testFindByProfileName() {
-        Optional<UserProfile> userProfile = userProfileRepository.findByProfileName("mockedProfile");
+        Optional<SourceProfile> userProfile = userProfileRepository.findByProfileName("mockedProfile");
         Assert.assertNotNull(userProfile);
         Assert.assertEquals(new Long(1), userProfile.get().getId());
         Assert.assertEquals("mockedProfile", userProfile.get().getAuthority());

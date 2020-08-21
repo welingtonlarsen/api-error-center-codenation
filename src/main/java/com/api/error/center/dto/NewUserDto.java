@@ -1,6 +1,6 @@
 package com.api.error.center.dto;
 
-import com.api.error.center.entity.User;
+import com.api.error.center.entity.Source;
 
 public class NewUserDto {
 
@@ -8,8 +8,8 @@ public class NewUserDto {
     private String username;
     private String userProfile;
 
-    public static NewUserDto converSourceToNewUserDto(User source) {
-        return new NewUserDto(source.getId(), source.getUsername(), source.getUserProfile().toString());
+    public static NewUserDto converSourceToNewUserDto(Source source) {
+        return new NewUserDto(source.getId(), source.getUsername(), source.getSourceProfile().toString());
     }
 
     private NewUserDto(Long id, String username, String userProfile) {

@@ -1,7 +1,7 @@
 package com.api.error.center.security;
 
 
-import com.api.error.center.entity.User;
+import com.api.error.center.entity.Source;
 import com.api.error.center.service.TokenService;
 import com.api.error.center.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,8 +38,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private void authenticateUser(String token) {
         Long userId = tokenService.getUserIdFromToken(token);
-        User user = userService.findById(userId).get();
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        Source source = userService.findById(userId).get();
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(source, null, source.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
