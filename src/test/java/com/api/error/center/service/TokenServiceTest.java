@@ -25,10 +25,8 @@ public class TokenServiceTest {
 
     @Test
     public void testGenerateToken() {
-        Source source = new Source();
+        Source source = new Source("username", "password", null);
         source.setId(1L);
-        source.setUsername("username");
-        source.setPassword("password");
 
         BDDMockito.given(authentication.getPrincipal()).willReturn(source);
         String token = tokenService.generateToken(this.authentication);

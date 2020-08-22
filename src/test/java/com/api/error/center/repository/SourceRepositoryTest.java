@@ -1,57 +1,58 @@
 package com.api.error.center.repository;
 
 import com.api.error.center.entity.Source;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.api.error.center.entity.SourceProfile;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class SourceRepositoryTest {
 
-    private Source source;
+    @Autowired
+    private SourceProfileRepository sourceProfileRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserProfileRepository userProfileRepository;
-
-    @Before
-    public void setUp() {
-        this.source = new Source();
-        source.setPassword("admin");
-        source.setUsername("admin");
-    }
+    private SourceRepository sourceRepository;
 
     @Test
     @WithMockUser
     public void testSave() {
-        Source response = userRepository.save(this.source);
-        Assert.assertNotNull(response);
+        SourceProfile sourceProfile = new SourceProfile("TestSaveSourceProfile");
+        sourceProfile = sourceProfileRepository.save(sourceProfile);
+        Source source = new Source("TestSaveUsername", "TestSavePassword", sourceProfile);
+
+        Source response = sourceRepository.save(source);
+
+        assertEquals(1L, response.getId());
+        assertEquals("TestSaveUsername", response.getUsername());
+        assertEquals("TestSavePassword", response.getPassword());
+        assertEquals("TestSaveSourceProfile", response.getSourceProfile().getAuthority());
     }
 
     @Test
     @WithMockUser
     public void testFindByUsername() {
-        Source sourceToFind = new Source();
-        source.setPassword("userToFind");
-        source.setUsername("userToFind");
-        userRepository.save(sourceToFind);
-        Optional<Source> response = userRepository.findByUsername(sourceToFind.getUsername());
+        SourceProfile sourceProfile = new SourceProfile("TestFindByUsernameSourceProfile");
+        sourceProfile = sourceProfileRepository.save(sourceProfile);
+        Source source = new Source("TestFindByUsernameUsername", "TestFindByUsernamePassword", sourceProfile);
+        sourceRepository.save(source);
 
-        Assert.assertTrue(response.isPresent());
-        Assert.assertEquals(response.get().getUsername(), sourceToFind.getUsername());
-        Assert.assertEquals(response.get().getPassword(), sourceToFind.getPassword());
+        Optional<Source> response = sourceRepository.findByUsername("TestFindByUsernameUsername");
+
+        assertEquals(1L, response.get().getId());
+        assertEquals("TestFindByUsernameUsername", response.get().getUsername());
+        assertEquals("TestFindByUsernamePassword", response.get().getPassword());
+        assertEquals("TestFindByUsernameSourceProfile", response.get().getSourceProfile().getAuthority());
     }
 }
 

@@ -1,7 +1,7 @@
 package com.api.error.center.service;
 
 import com.api.error.center.entity.Source;
-import com.api.error.center.repository.UserRepository;
+import com.api.error.center.repository.SourceRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,21 +27,20 @@ public class SourceServiceTest {
     private Source source;
 
     @MockBean
-    private UserRepository mockedUserRepository;
+    private SourceRepository mockedSourceRepository;
 
     @Autowired
     private UserService userService;
 
     @Before
     public void setUp() {
-        this.source = new Source();
-        source.setUsername("admin");
+        this.source = new Source("admin", null, null);
     }
 
     @Test
     @WithMockUser
     public void testFindByUsername() {
-        BDDMockito.given(mockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.source));
+        BDDMockito.given(mockedSourceRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.source));
 
         Optional<Source> response = userService.findByUsername("admin");
         Assert.assertTrue(response.isPresent());
@@ -51,7 +50,7 @@ public class SourceServiceTest {
     @Test
     @WithMockUser
     public void testLoadUserByValidUsername() {
-        BDDMockito.given(mockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.source));
+        BDDMockito.given(mockedSourceRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(this.source));
         UserDetails response = this.userService.loadUserByUsername(source.getUsername());
 
         Assert.assertEquals(response.getUsername(), this.source.getUsername());
@@ -60,7 +59,7 @@ public class SourceServiceTest {
     @Test(expected = UsernameNotFoundException.class)
     @WithMockUser
     public void testLoadUserInvalidUsername() {
-        BDDMockito.given(mockedUserRepository.findByUsername(Mockito.anyString())).willReturn(Optional.ofNullable(null));
+        BDDMockito.given(mockedSourceRepository.findByUsername(Mockito.anyString())).willReturn(Optional.ofNullable(null));
         this.userService.loadUserByUsername("invalidUsername");
     }
 

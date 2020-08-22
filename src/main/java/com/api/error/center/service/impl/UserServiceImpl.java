@@ -1,7 +1,7 @@
 package com.api.error.center.service.impl;
 
 import com.api.error.center.entity.Source;
-import com.api.error.center.repository.UserRepository;
+import com.api.error.center.repository.SourceRepository;
 import com.api.error.center.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private SourceRepository sourceRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -29,16 +29,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<Source> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return sourceRepository.findByUsername(username);
     }
 
     @Override
     public Optional<Source> findById(Long userId) {
-        return userRepository.findById(userId);
+        return sourceRepository.findById(userId);
     }
 
     @Override
     public Source save(Source source) {
-        return userRepository.save(source);
+        return sourceRepository.save(source);
     }
 }

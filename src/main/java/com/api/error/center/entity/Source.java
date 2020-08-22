@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,14 +16,16 @@ public class Source implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String username;
+
+    @NotNull
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private SourceProfile sourceProfile;
 
     public Source() {
-
     }
 
     public Source(String username, String password, SourceProfile sourceProfile) {
@@ -39,20 +42,8 @@ public class Source implements UserDetails {
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public SourceProfile getSourceProfile() {
         return this.sourceProfile;
-    }
-
-    public void setSourceProfile(SourceProfile sourceProfile) {
-        this.sourceProfile = sourceProfile;
     }
 
     @Override
@@ -91,5 +82,4 @@ public class Source implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }

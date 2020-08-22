@@ -3,8 +3,8 @@ package com.api.error.center.controller;
 import com.api.error.center.entity.Source;
 import com.api.error.center.entity.SourceProfile;
 import com.api.error.center.form.LoginForm;
-import com.api.error.center.repository.UserProfileRepository;
-import com.api.error.center.repository.UserRepository;
+import com.api.error.center.repository.SourceProfileRepository;
+import com.api.error.center.repository.SourceRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -38,24 +38,23 @@ public class AuthenticationControllerTest {
     private final String password = "1234";
 
     @MockBean
-    UserRepository userRepository;
+    SourceRepository sourceRepository;
 
     @Autowired
     MockMvc mvc;
 
     @Autowired
-    UserProfileRepository userProfileRepository;
+    SourceProfileRepository sourceProfileRepository;
 
     @Before
     public void setUp() {
-        SourceProfile sourceProfile = new SourceProfile();
-        sourceProfile.setProfileName("ADMIN");
-        userProfileRepository.save(sourceProfile);
+        SourceProfile sourceProfile = new SourceProfile("ADMIN");
+        sourceProfileRepository.save(sourceProfile);
     }
 
     @Test
     public void testAuthenticationWithValidUser() throws Exception {
-        BDDMockito.given(userRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(getMockedUser(this.username, this.password)));
+        BDDMockito.given(sourceRepository.findByUsername(Mockito.anyString())).willReturn(Optional.of(getMockedUser(this.username, this.password)));
 
         mvc.perform(MockMvcRequestBuilders.post("/authentication").content(getJsonPayload(this.username, this.password))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -78,11 +77,8 @@ public class AuthenticationControllerTest {
     }
 
     private Source getMockedUser(String username, String password) {
-        Source source = new Source();
+        Source source = new Source(username, new BCryptPasswordEncoder().encode(password), sourceProfileRepository.findById(1L).get());
         source.setId(1L);
-        source.setUsername(username);
-        source.setPassword(new BCryptPasswordEncoder().encode(password));
-        source.setSourceProfile(userProfileRepository.findById(1L).get());
         return source;
     }
 

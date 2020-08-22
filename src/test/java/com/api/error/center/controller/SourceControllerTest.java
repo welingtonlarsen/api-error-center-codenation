@@ -61,18 +61,14 @@ public class SourceControllerTest {
     }
 
     private Source getMockedUser() {
-        Source source = new Source();
+        Source source = new Source("mocked user", "mockeduser", getMockedUserProfile());
         source.setId(1L);
-        source.setUsername("mocked user");
-        source.setPassword("mockeduser");
-        source.setSourceProfile(getMockedUserProfile());
         return source;
     }
 
     private SourceProfile getMockedUserProfile() {
-        SourceProfile sourceProfile = new SourceProfile();
+        SourceProfile sourceProfile = new SourceProfile("Profile Test");
         sourceProfile.setId(1L);
-        sourceProfile.setProfileName("Profile Test");
         return sourceProfile;
     }
 }

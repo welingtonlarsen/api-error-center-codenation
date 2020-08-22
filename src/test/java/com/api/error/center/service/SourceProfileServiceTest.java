@@ -1,7 +1,7 @@
 package com.api.error.center.service;
 
 import com.api.error.center.entity.SourceProfile;
-import com.api.error.center.repository.UserProfileRepository;
+import com.api.error.center.repository.SourceProfileRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 public class SourceProfileServiceTest {
 
     @MockBean
-    UserProfileRepository mockedUserProfileRepository;
+    SourceProfileRepository mockedSourceProfileRepository;
 
     @Autowired
     SourceProfileService sourceProfileService;
@@ -35,35 +35,34 @@ public class SourceProfileServiceTest {
 
     @Test
     public void testSave() {
-        BDDMockito.given(mockedUserProfileRepository.save(Mockito.any(SourceProfile.class))).willReturn(getMockedUserProfile());
+        BDDMockito.given(mockedSourceProfileRepository.save(Mockito.any(SourceProfile.class))).willReturn(getMockedUserProfile());
         SourceProfile sourceProfile = sourceProfileService.save(new SourceProfile());
         assertNotNull(sourceProfile);;
         assertEquals(new Long(1), sourceProfile.getId());
-        assertEquals("mockedUserProfile", sourceProfile.getProfileName());
+        assertEquals("mockedUserProfile", sourceProfile.getAuthority());
     }
 
     @Test
     public void testFindById() {
-        BDDMockito.given(mockedUserProfileRepository.findById(Mockito.anyLong())).willReturn(Optional.of(getMockedUserProfile()));
+        BDDMockito.given(mockedSourceProfileRepository.findById(Mockito.anyLong())).willReturn(Optional.of(getMockedUserProfile()));
         Optional<SourceProfile> userProfile = sourceProfileService.findById(1L);
         assertTrue(userProfile.isPresent());
         assertEquals(new Long(1), userProfile.get().getId());
-        assertEquals("mockedUserProfile", userProfile.get().getProfileName());
+        assertEquals("mockedUserProfile", userProfile.get().getAuthority());
     }
 
     @Test
     public void testFindByProfileName() {
-        BDDMockito.given(mockedUserProfileRepository.findByProfileName(Mockito.anyString())).willReturn(Optional.of(getMockedUserProfile()));
+        BDDMockito.given(mockedSourceProfileRepository.findByProfileName(Mockito.anyString())).willReturn(Optional.of(getMockedUserProfile()));
         Optional<SourceProfile> userProfile = sourceProfileService.findByProfileName("mockedUserProfile");
         assertTrue(userProfile.isPresent());
         assertEquals(new Long(1), userProfile.get().getId());
-        assertEquals("mockedUserProfile", userProfile.get().getProfileName());
+        assertEquals("mockedUserProfile", userProfile.get().getAuthority());
     }
 
     public SourceProfile getMockedUserProfile() {
-        SourceProfile sourceProfile = new SourceProfile();
+        SourceProfile sourceProfile = new SourceProfile("mockedUserProfile");
         sourceProfile.setId(1L);
-        sourceProfile.setProfileName("mockedUserProfile");
         return sourceProfile;
     }
 

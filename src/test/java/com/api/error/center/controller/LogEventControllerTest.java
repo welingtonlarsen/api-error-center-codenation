@@ -4,7 +4,7 @@ import com.api.error.center.entity.LogEvent;
 import com.api.error.center.entity.Source;
 import com.api.error.center.enums.Level;
 import com.api.error.center.form.LogEventForm;
-import com.api.error.center.repository.UserRepository;
+import com.api.error.center.repository.SourceRepository;
 import com.api.error.center.service.LogEventService;
 import com.api.error.center.util.LogEventTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,7 +46,7 @@ public class LogEventControllerTest extends LogEventTest {
     LogEventService logEventService;
 
     @MockBean
-    UserRepository userRepository;
+    SourceRepository sourceRepository;
 
     @Autowired
     MockMvc mockMvc;
@@ -179,7 +179,7 @@ public class LogEventControllerTest extends LogEventTest {
 
         Source source = new Source();
         source.setId(1L);
-        BDDMockito.given(userRepository.findById(anyLong())).willReturn(Optional.of(source));
+        BDDMockito.given(sourceRepository.findById(anyLong())).willReturn(Optional.of(source));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/log").param("sourceId", "1")
                 .contentType(MediaType.APPLICATION_JSON)

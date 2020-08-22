@@ -57,59 +57,24 @@ public class LogEvent {
         return level;
     }
 
-    public void setLevel(Level level) {
-        this.level = level;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getLog() {
         return log;
     }
 
-    public void setLog(String log) {
-        this.log = log;
-    }
-
     public Source getSource() {
         return source;
-    }
-
-    public void setSource(Source source) {
-        this.source = source;
     }
 
     public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
     public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    @Override
-    public String toString() {
-        return "LogEvent{" +
-                ", level=" + level +
-                ", description='" + description + '\'' +
-                ", log='" + log + '\'' +
-                ", source=" + source +
-                ", date=" + date +
-                ", quantity=" + quantity +
-                '}';
-    }
 }
