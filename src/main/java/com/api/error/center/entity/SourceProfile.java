@@ -16,6 +16,13 @@ public class SourceProfile implements GrantedAuthority {
 
     private String profileName;
 
+    public SourceProfile() {
+    }
+
+    public SourceProfile(String profileName) {
+        this.profileName = profileName;
+    }
+
     public Long getId() {
         return id;
     }

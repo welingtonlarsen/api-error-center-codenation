@@ -18,7 +18,7 @@ public class Source implements UserDetails {
     private String username;
     private String password;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private SourceProfile sourceProfile;
 
     public Source() {
