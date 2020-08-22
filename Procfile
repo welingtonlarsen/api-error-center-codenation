@@ -1,1 +1,0 @@
-web: java -jar -Dspring.profiles.active=prod -Dserver.port=$PORT target/error.center-0.0.1-SNAPSHOT.jar
