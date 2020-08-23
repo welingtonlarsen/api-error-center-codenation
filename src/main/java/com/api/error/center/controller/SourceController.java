@@ -3,7 +3,7 @@ package com.api.error.center.controller;
 import com.api.error.center.dto.NewUserDto;
 import com.api.error.center.entity.Source;
 import com.api.error.center.entity.SourceProfile;
-import com.api.error.center.form.NewUserForm;
+import com.api.error.center.form.NewSourceForm;
 import com.api.error.center.response.Response;
 import com.api.error.center.service.SourceProfileService;
 import com.api.error.center.service.UserService;
@@ -30,7 +30,7 @@ public class SourceController {
     SourceProfileService sourceProfileService;
 
     @PostMapping
-    public ResponseEntity<Response<NewUserDto>> createUser(@RequestBody @Valid NewUserForm newUserForm, BindingResult bindingResult) {
+    public ResponseEntity<Response<NewUserDto>> createSource(@RequestBody @Valid NewSourceForm newSourceForm, BindingResult bindingResult) {
         Response<NewUserDto> response = new Response<>();
 
         if (bindingResult.hasErrors()) {
@@ -38,10 +38,10 @@ public class SourceController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        Optional<SourceProfile> sourceProfile = sourceProfileService.findByProfileName(newUserForm.getProfileName());
+        Optional<SourceProfile> sourceProfile = sourceProfileService.findByProfileName(newSourceForm.getProfileName());
 
         if (sourceProfile.isPresent()) {
-            Source newSource = newUserForm.convertNewUserFormToEntity(newUserForm, sourceProfile.get());
+            Source newSource = newSourceForm.convertNewUserFormToEntity(newSourceForm, sourceProfile.get());
             newSource = sourceService.save(newSource);
             response.setData(NewUserDto.converSourceToNewUserDto(newSource));
             return ResponseEntity.status(HttpStatus.CREATED).body(response);

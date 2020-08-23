@@ -7,7 +7,7 @@ import com.api.error.center.util.BCryptUtil;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class NewUserForm extends UserForm {
+public class NewSourceForm extends SourceForm {
 
     @Pattern(regexp="^(SYSTEM)$", message = "Are accepted for profileName only SYSTEM")
     @NotNull(message = "profileName must not be null")
@@ -21,7 +21,7 @@ public class NewUserForm extends UserForm {
         this.profileName = profileName;
     }
 
-    public Source convertNewUserFormToEntity(NewUserForm newUserForm, SourceProfile sourceProfile) {
+    public Source convertNewUserFormToEntity(NewSourceForm newSourceForm, SourceProfile sourceProfile) {
         return new Source(username, BCryptUtil.enconde(password), sourceProfile);
     }
 }

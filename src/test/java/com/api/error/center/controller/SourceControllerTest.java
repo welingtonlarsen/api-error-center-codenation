@@ -2,7 +2,7 @@ package com.api.error.center.controller;
 
 import com.api.error.center.entity.Source;
 import com.api.error.center.entity.SourceProfile;
-import com.api.error.center.form.NewUserForm;
+import com.api.error.center.form.NewSourceForm;
 import com.api.error.center.service.SourceProfileService;
 import com.api.error.center.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -53,7 +53,7 @@ public class SourceControllerTest {
     }
 
     private String getValidUserFormPayLoad() throws JsonProcessingException {
-        NewUserForm userForm = new NewUserForm();
+        NewSourceForm userForm = new NewSourceForm();
         userForm.setProfileName("SYSTEM");
         userForm.setUsername("mocked user");
         userForm.setPassword("mocked password");

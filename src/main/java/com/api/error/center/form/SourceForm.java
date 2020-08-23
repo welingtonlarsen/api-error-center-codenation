@@ -2,7 +2,7 @@ package com.api.error.center.form;
 
 import javax.validation.constraints.NotNull;
 
-public abstract class UserForm {
+public abstract class SourceForm {
 
     @NotNull(message = "username must not be null")
     protected String username;
