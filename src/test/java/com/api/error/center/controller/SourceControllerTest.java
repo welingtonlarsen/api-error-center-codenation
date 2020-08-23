@@ -47,7 +47,7 @@ public class SourceControllerTest {
         BDDMockito.given(sourceProfileService.findByProfileName(Mockito.anyString())).willReturn(Optional.of(getMockedUserProfile()));
         BDDMockito.given(userService.save(Mockito.any(Source.class))).willReturn(getMockedUser());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/user").content(getValidUserFormPayLoad())
+        mockMvc.perform(MockMvcRequestBuilders.post("/source").content(getValidUserFormPayLoad())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }

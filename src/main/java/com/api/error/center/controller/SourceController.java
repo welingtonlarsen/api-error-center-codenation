@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/source")
 public class SourceController {
 
     @Autowired
